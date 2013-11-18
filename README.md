@@ -154,10 +154,10 @@ BigPipe.register({});
 
 |	标签			 |	插件 	   					|		
 |:--------------:|:-----------------------------|:-----------
-|	body 		 |		compiler.body.php 		|
-|	html 		 |		compiler.html.php 		|
-|	head 		 |		compiler.head.php 		|
-|	script 		 |		compiler.script.php 	|
-| 	style 		 |		compiler.style.php 		|
-|   title 		 | 		compiler.title.php 		|
+|	body 		 |		compiler.body.php 		| </body>后添加js请求
+|	html 		 |		compiler.html.php 		| 初始化数据
+|	head 		 |		compiler.head.php 		| 确定css安放位置
+|	script 		 |		compiler.script.php 	| 收集内联脚本
+| 	style 		 |		compiler.style.php 		| 收集内联样式
+|   title 		 | 		compiler.title.php 		| 获取title，以便异步请求切换页面
 
