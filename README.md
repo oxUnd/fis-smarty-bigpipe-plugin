@@ -154,7 +154,7 @@ BigPipe.register({});
 
 |	标签			 |	插件 	   					|										   |
 |:--------------:|:-----------------------------|:-----------------------------------------|
-|	body 		 |		compiler.body.php 		| </body>后添加js请求					   |
+|	body 		 |		compiler.body.php 		| `</body>`后添加js请求					   |
 |	html 		 |		compiler.html.php 		| 初始化数据								   |
 |	head 		 |		compiler.head.php 		| 确定css安放位置 						   |
 |	script 		 |		compiler.script.php 	| 收集内联脚本 							   |
