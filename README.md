@@ -154,10 +154,13 @@ BigPipe.register({});
 
 |	标签			 |	插件 	   					|										   |
 |:--------------:|:-----------------------------|:-----------------------------------------|
-|	body 		 |		compiler.body.php 		| `</body>`后添加js请求					   |
+|	body 		 |		compiler.body.php 		| 确定JS的位置					   		   |
 |	html 		 |		compiler.html.php 		| 初始化数据								   |
 |	head 		 |		compiler.head.php 		| 确定css安放位置 						   |
 |	script 		 |		compiler.script.php 	| 收集内联脚本 							   |
 | 	style 		 |		compiler.style.php 		| 收集内联样式 							   |
 |   title 		 | 		compiler.title.php 		| 获取title，以便异步请求切换页面  		   |
+
+在`正常模式`渲染下，js和css加载的位置，css在head关闭标签前；js在body关闭标签前。
+在`pipeline`渲染下，js和css的链接给前端加载器，前端负责加载。包括html内容，前端负责渲染。
 
