@@ -179,7 +179,7 @@ class FISPagelet {
                 //widget调用时mode='quickling'，so，打出异步加载代码
                 if ($special_flag && !$hit) {
                     if (!$group) {
-                        echo '<textarea class="g_fis_bigrender" style="visibility: hidden;">'
+                        echo '<textarea class="g_fis_bigrender" style="display:none;">'
                             .'BigPipe.asyncLoad({id: "'.$id.'"});'
                             .'</textarea>';
                     } else {
