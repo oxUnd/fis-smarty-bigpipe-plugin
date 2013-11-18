@@ -17,7 +17,7 @@
     </tr>
     <tr>
         <td>
-```html
+<code>
 {%html%}
     {%head%}
         <title>This is a test</title>
@@ -39,10 +39,10 @@
         {%/widget_block%}
     {%/body%}
 {%/html%}
-```
+</code>
         </td>
         <td>
-```html
+<code>
 <html>
     <head>
         <title>This is a test</title>
@@ -68,7 +68,7 @@
         </script>
     </body>
 </html>
-```
+</code>
         </td>
     </tr>
 </table>
@@ -85,7 +85,7 @@
     </tr>
     <tr>
         <td>
-```html
+<code>
 {%html%}
     {%head%}
         <title>This is a test</title>
@@ -107,10 +107,10 @@
         {%/widget_block%}
     {%/body%}
 {%/html%}
-```
+</code>
         </td>
         <td>
-```html
+<code>
 <html>
     <head>
         <title>This is a test</title>
@@ -154,7 +154,7 @@ BigPipe.onPageletArrived({"id":"pager",
 <script type="text/javascript">
 BigPipe.register({});
 </script>
-```
+</code>
         </td>
     </tr>
 </table>
