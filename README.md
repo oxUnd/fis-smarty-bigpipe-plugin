@@ -152,12 +152,12 @@ BigPipe.register({});
 
 在smarty里面为了控制输出，使用插件代替几个html标签。
 
-|	标签			 |	插件 	   					|		
-|:--------------:|:-----------------------------|:-----------
-|	body 		 |		compiler.body.php 		| </body>后添加js请求
-|	html 		 |		compiler.html.php 		| 初始化数据
-|	head 		 |		compiler.head.php 		| 确定css安放位置
-|	script 		 |		compiler.script.php 	| 收集内联脚本
-| 	style 		 |		compiler.style.php 		| 收集内联样式
-|   title 		 | 		compiler.title.php 		| 获取title，以便异步请求切换页面
+|	标签			 |	插件 	   					|										   |
+|:--------------:|:-----------------------------|:-----------------------------------------|
+|	body 		 |		compiler.body.php 		| </body>后添加js请求					   |
+|	html 		 |		compiler.html.php 		| 初始化数据								   |
+|	head 		 |		compiler.head.php 		| 确定css安放位置 						   |
+|	script 		 |		compiler.script.php 	| 收集内联脚本 							   |
+| 	style 		 |		compiler.style.php 		| 收集内联样式 							   |
+|   title 		 | 		compiler.title.php 		| 获取title，以便异步请求切换页面  		   |
 
