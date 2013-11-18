@@ -146,4 +146,18 @@ BigPipe.register({});
 </script>
 ```
 
+如上源码(before)和运行后的代码(after)；
+
+#### Detail
+
+在smarty里面为了控制输出，使用插件代替几个html标签。
+
+|	标签			 |	插件 	   					|		
+|:--------------:|:-----------------------------|:-----------
+|	body 		 |		compiler.body.php 		|
+|	html 		 |		compiler.html.php 		|
+|	head 		 |		compiler.head.php 		|
+|	script 		 |		compiler.script.php 	|
+| 	style 		 |		compiler.style.php 		|
+|   title 		 | 		compiler.title.php 		|
 
