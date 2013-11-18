@@ -5,19 +5,10 @@
 #### Overview
 
 `noscript` Render
+-----
+##before##
 
-<table>
-    <tr>
-        <th>
-            Before
-        </th>
-        <th>
-            After
-        </th>
-    </tr>
-    <tr>
-        <td>
-<code>
+```html
 {%html%}
     {%head%}
         <title>This is a test</title>
@@ -39,10 +30,11 @@
         {%/widget_block%}
     {%/body%}
 {%/html%}
-</code>
-        </td>
-        <td>
-<code>
+```
+
+##after##
+
+```html
 <html>
     <head>
         <title>This is a test</title>
@@ -68,24 +60,15 @@
         </script>
     </body>
 </html>
-</code>
-        </td>
-    </tr>
-</table>
+```
+
 
 `bigpipe` render == `pipeline`
-<table>
-    <tr>
-        <th>
-            Before
-        </th>
-        <th>
-            After
-        </th>
-    </tr>
-    <tr>
-        <td>
-<code>
+-------
+
+##before##
+
+```html
 {%html%}
     {%head%}
         <title>This is a test</title>
@@ -107,10 +90,10 @@
         {%/widget_block%}
     {%/body%}
 {%/html%}
-</code>
-        </td>
-        <td>
-<code>
+```
+##after##
+
+```html
 <html>
     <head>
         <title>This is a test</title>
@@ -139,7 +122,6 @@ BigPipe.onPageReady(function() {
 BigPipe.onPageletArrived({"id":"__elm_0",
 "parent_id":"pager","html_id":"__cnt_0"});
 </script>
-
 <code style="display:none;" id="__cnt_1">
 <!--
 <div id="__elm_0"></div>
@@ -154,7 +136,5 @@ BigPipe.onPageletArrived({"id":"pager",
 <script type="text/javascript">
 BigPipe.register({});
 </script>
-</code>
-        </td>
-    </tr>
-</table>
+```
+
