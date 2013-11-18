@@ -4,11 +4,13 @@
 
 #### Overview
 
-`noscript` Render
+
 
 -----
 
-####before####
+#####`noscript` Render#####
+
+######before######
 
 ```html
 {%html%}
@@ -34,7 +36,7 @@
 {%/html%}
 ```
 
-####after####
+#####after#####
 
 ```html
 <html>
@@ -64,13 +66,11 @@
 </html>
 ```
 
-
-`bigpipe` render == `pipeline`
-
-
 -------
 
-####before####
+####`bigpipe` render == `pipeline`####
+
+#####before#####
 
 ```html
 {%html%}
@@ -96,7 +96,7 @@
 {%/html%}
 ```
 
-####after####
+#####after#####
 
 ```html
 <html>
