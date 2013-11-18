@@ -4,7 +4,10 @@
 
 #### Overview
 
+插件支持两种渲染模式，
 
++ 正常渲染模式 `noscript`，不需要前端库进行控制
++ Pipeline渲染模式 `bigpipe`，需要前端库控制渲染
 
 -----
 
@@ -73,7 +76,7 @@
 #####before#####
 
 ```html
-{%html%}
+{%html mode="bigpipe"%}
     {%head%}
         <title>This is a test</title>
     {%/head%}
@@ -142,4 +145,5 @@ BigPipe.onPageletArrived({"id":"pager",
 BigPipe.register({});
 </script>
 ```
+
 
