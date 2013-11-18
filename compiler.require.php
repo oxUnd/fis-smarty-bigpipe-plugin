@@ -2,11 +2,11 @@
 
 function smarty_compiler_require($arrParams,  $smarty){
     $strName = $arrParams['name'];
-    
+
     $async = 'false';
 
     if (isset($arrParams['async'])) {
-        $async = trim($arrParams['async'], "'\"");
+        $async = trim($arrParams['async'], "'\" ");
         if ($async !== 'true') {
             $async = 'false';
         }
