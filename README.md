@@ -162,5 +162,6 @@ BigPipe.register({});
 |   title 		 | 		compiler.title.php 		| 获取title，以便异步请求切换页面  		   |
 
 在`正常模式`渲染下，js和css加载的位置，css在head关闭标签前；js在body关闭标签前。
+
 在`pipeline`渲染下，js和css的链接给前端加载器，前端负责加载。包括html内容，前端负责渲染。
 
