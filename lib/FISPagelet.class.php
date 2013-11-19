@@ -57,7 +57,7 @@ function convertToUtf8($string) {
 
     if (!isUtf8($string)) {
         if (function_exists('mb_convert_encoding')) {
-            $string = mb_convert_encoding($string, 'UTF-8');
+            $string = mb_convert_encoding($string, 'UTF-8', 'GBK');
         } else {
             $string = iconv('GBK','UTF-8//IGNORE', $string);
         }
