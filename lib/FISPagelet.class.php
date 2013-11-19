@@ -55,7 +55,7 @@ function convertToUtf8($string) {
         return '';
     }
 
-    if (!self::isUtf8($string)) {
+    if (!isUtf8($string)) {
         if (function_exists('mb_convert_encoding')) {
             $string = mb_convert_encoding($string, 'UTF-8');
         } else {
