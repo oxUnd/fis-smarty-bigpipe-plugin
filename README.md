@@ -165,3 +165,10 @@ BigPipe.register({});
 
 在`pipeline`渲染下，js和css的链接给前端加载器，前端负责加载。包括html内容，前端负责渲染。
 
++ lib/FISResource.class.php
+
+<iframe width="800" height="500" frameborder="0" src="http://pythontutor.com/iframe-embed.html#code=collection+%3D+%5B%5D%0Adict+%3D+%7B%0A++++%22res%22%3A+%7B%0A++++++++%22a.js%22%3A+%7B%0A++++++++++++'uri'%3A+'/static/widget/a.js'%0A++++++++%7D,%0A++++++++%22c.js%22%3A+%7B%0A++++++++++++'uri'%3A+'/static/widget/b.js'%0A++++++++%7D%0A++++%7D%0A%7D%0A%0Adef+load(id)%3A%0A++++res+%3D+dict%5B'res'%5D%0A++++if+res.has_key(id)%3A%0A++++++++info+%3D+res%5Bid%5D%0A++++++++collection.append(info%5B'uri'%5D)%0A++++++++return+info%5B'uri'%5D%0A++++return+False%0A%0Aload('a.js')%0Aload('b.js')%0Aload('c.js')&cumulative=false&heapPrimitives=false&drawParentPointers=false&textReferences=false&showOnlyOutputs=false&py=2&curInstr=0&codeDivWidth=350&codeDivHeight=400"> </iframe>
+
++ lib/FISPagelet.class.php
+
+
