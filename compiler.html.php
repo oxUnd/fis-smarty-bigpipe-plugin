@@ -3,7 +3,7 @@
 function smarty_compiler_html($arrParams,  $smarty){
     $strResourceApiPath = preg_replace('/[\\/\\\\]+/', '/', dirname(__FILE__) . '/lib/FISPagelet.class.php');
     $strFramework = $arrParams['framework'];
-    $strMode = $arrParams['mode'];
+    $strMode = isset($arrParams['mode']) ? $arrParams['mode'] : 'null';
 
     unset($arrParams['framework']);
     unset($arrParams['mode']);
