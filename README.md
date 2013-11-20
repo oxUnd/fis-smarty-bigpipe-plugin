@@ -169,3 +169,18 @@ BigPipe.register({});
 + lib/FISPagelet.class.php   初始化系统，输出模式控制
 
 
+#### 关于部署迁移
+
+OK, 各个插件的功能都已经说过了。现在说一下部署的问题
+
+**纯粹的FIS 2.0项目**
+
+-----
+
+把所有插件放到smarty的 plugin_dir下。
+
+**和fis 1.0共存？**
+
+----
+
+<font style="color: red;">2.0里面有一个插件和1.0有冲突，那就是`compiler.widget_block.php`，请删除2.0里面的。</font>
