@@ -183,4 +183,6 @@ OK, 各个插件的功能都已经说过了。现在说一下部署的问题
 
 **和fis 1.0共存？**
 
+把所有插件放到smarty的 plugin_dir下，并删除`compiler.widget_block.php`
+
 **2.0里面有一个插件和1.0有冲突，那就是`compiler.widget_block.php`，请删除2.0里面的.**
