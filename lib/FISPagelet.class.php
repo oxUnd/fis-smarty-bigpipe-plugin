@@ -224,6 +224,8 @@ class FISPagelet {
      */
     static public function start($id, $mode = null, $group = null) {
         $has_parent = !empty(self::$_context);
+
+        //这个是用来判断是否widget是async加载的。
         $special_flag = false;
         if ($mode !== null) {
             $special_flag = true;
@@ -274,7 +276,7 @@ class FISPagelet {
                     $parent_id = $parent['id'];
                     self::$_contextMap[$parent_id] = $parent;
                     $context['parent_id'] = $parent_id;
-                    if($parent['hit']) {
+                    if($parent['hit'] && !$special_flag) {
                         $hit = true;
                     } else if($hit && self::$mode === self::MODE_QUICKLING){
                         unset($context['parent_id']);
