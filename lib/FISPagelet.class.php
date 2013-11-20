@@ -92,6 +92,13 @@ class FISPagelet {
         array(),
         array()
     );
+
+    /**
+     * 记录pagelet_id
+     * @var string
+     */
+    static private $_pagelet_id = null;
+
     static private $_session_id = 0;
     static private $_context = array();
     static private $_contextMap = array();
@@ -131,6 +138,7 @@ class FISPagelet {
         } else {
             self::$default_mode = self::MODE_NOSCRIPT;
         }
+
         $is_ajax = isset($_SERVER['HTTP_X_REQUESTED_WITH'])
             && (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
         if ($is_ajax) {
@@ -226,7 +234,7 @@ class FISPagelet {
         } else {
             self::$widget_mode = self::$mode;
         }
-
+        self::$_pagelet_id = $id;
         $parent_id = $has_parent ? self::$_context['id'] : '';
         $qk_flag = self::$mode == self::MODE_QUICKLING ? '_qk_' : '';
         $id = empty($id) ? '__elm_' . $parent_id . '_' . $qk_flag . self::$_session_id ++ : $id;
@@ -236,7 +244,9 @@ class FISPagelet {
 
         switch(self::$widget_mode) {
             case self::MODE_NOSCRIPT:
-                echo '<div id="' . $id . '">';
+                if (self::$_pagelet_id) {
+                    echo '<div id="' . $id . '">';
+                }
                 break;
             case self::MODE_QUICKLING:
                 $hit = self::$filter[$id];
@@ -326,8 +336,13 @@ class FISPagelet {
                 self::$_context = null;
             }
             self::$widget_mode = self::$mode;
+            echo '</div>';
+        } else {
+            if (self::$_pagelet_id) {
+                echo '</div>';
+            }
         }
-        echo '</div>';
+        
         return $ret;
     }
 
