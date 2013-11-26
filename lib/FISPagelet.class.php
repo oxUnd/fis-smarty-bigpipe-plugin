@@ -11,35 +11,35 @@ if (!class_exists('FISResource')) require_once(dirname(__FILE__) . '/FISResource
  */
 function isUtf8($string) {
     $length = strlen($string);
- 
+
     for ($i = 0; $i < $length; $i++) {
         if (ord($string[$i]) < 0x80) {
             $n = 0;
         }
- 
+
         else if ((ord($string[$i]) & 0xE0) == 0xC0) {
             $n = 1;
         }
- 
+
         else if ((ord($string[$i]) & 0xF0) == 0xE0) {
             $n = 2;
         }
- 
+
         else if ((ord($string[$i]) & 0xF0) == 0xF0) {
             $n = 3;
         }
- 
+
         else {
             return FALSE;
         }
- 
+
         for ($j = 0; $j < $n; $j++) {
             if ((++$i == $length) || ((ord($string[$i]) & 0xC0) != 0x80)) {
                 return FALSE;
             }
         }
     }
- 
+
     return TRUE;
 }
 
@@ -50,7 +50,7 @@ function isUtf8($string) {
  * @return string
  */
 function convertToUtf8($string) {
-    
+
     if (!is_string($string)) {
         return '';
     }
@@ -344,7 +344,7 @@ class FISPagelet {
                 echo '</div>';
             }
         }
-        
+
         return $ret;
     }
 
@@ -473,7 +473,7 @@ class FISPagelet {
                 );
                 break;
             case self::MODE_QUICKLING:
-                header('Content-Type: text/json;');
+                header('Content-Type: text/json;charset: utf-8');
                 if ($res['script']) {
                     $res['script'] = convertToUtf8(implode("\n", $res['script']));
                 }
