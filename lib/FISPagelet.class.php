@@ -124,6 +124,8 @@ class FISPagelet {
     static public $cp;
     static public $arrEmbeded = array();
 
+    static public $cdn;
+
     /**
      * 设置渲染模式及其需要渲染的widget
      * @param $default_mode string 设置默认渲染模式
