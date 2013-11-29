@@ -349,6 +349,19 @@ class FISPagelet {
     }
 
     /**
+     * 设置cdn
+     */
+    static public function setCdn($cdn) {
+        $cdn = trim($cdn);
+        self::$cdn = $cdn;
+    }
+
+    static public function getCdn() {
+        return self::$cdn;
+    }
+
+
+    /**
      * 渲染静态资源
      * @param $html
      * @param $arr
@@ -362,7 +375,7 @@ class FISPagelet {
             $loadModJs = (FISResource::getFramework() && ($arr['js'] || $resource_map));
             if ($loadModJs) {
                 foreach ($arr['js'] as $js) {
-                    $code .= '<script type="text/javascript" src="' . $js . '"></script>';
+                    $code .= '<script type="text/javascript" src="' . self::getCdn() . $js . '"></script>';
                     if ($js == FISResource::getFramework()) {
                         if ($resource_map) {
                             $code .= '<script type="text/javascript">';
@@ -384,7 +397,7 @@ class FISPagelet {
             $code = '';
             if (!empty($arr['css'])) {
                 $code = '<link rel="stylesheet" type="text/css" href="'
-                    . implode('" /><link rel="stylesheet" type="text/css" href="', $arr['css'])
+                    . implode('" /><link rel="stylesheet" type="text/css" href="' . self::getCdn(), $arr['css'])
                     . '" />';
             }
             if (!empty($arr['style'])) {
@@ -436,6 +449,7 @@ class FISPagelet {
                 'pkg' => array()
             )
         );
+
         //{{{
         foreach (self::$inner_widget[$mode] as $item) {
             foreach ($res as $key => $val) {
@@ -461,6 +475,16 @@ class FISPagelet {
             }
         }
         //}}}
+
+        //add cdn
+        foreach ((array)$res['js'] as $key => $js) {
+            $res['js'][$key] = self::getCdn() . $js;
+        }
+
+        foreach ((array)$res['css'] as $key => $css) {
+            $res['css'][$key] = self::getCdn() . $css;
+        }
+
         //tpl信息没有必要打到页面
         switch($mode) {
             case self::MODE_NOSCRIPT:

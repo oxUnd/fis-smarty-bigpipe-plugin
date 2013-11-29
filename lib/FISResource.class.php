@@ -164,7 +164,7 @@ class FISResource {
     }
 
     //获取异步js资源集合，变为json格式的resourcemap
-    public static function getResourceMap($arr) {
+    public static function getResourceMap($arr, $cdn = '') {
         $ret = '';
         $arrResourceMap = array();
         if (isset($arr['res'])) {
@@ -179,7 +179,7 @@ class FISResource {
                 }
 
                 $arrResourceMap['res'][$id] = array(
-                    'url' => $arrRes['uri'],
+                    'url' => $cdn . $arrRes['uri'],
                 );
 
                 if (!empty($arrRes['pkg'])) {
@@ -198,7 +198,7 @@ class FISResource {
         if (isset($arr['pkg'])) {
             foreach ($arr['pkg'] as $id => $arrRes) {
                 $arrResourceMap['pkg'][$id] = array(
-                    'url'=> $arrRes['uri']
+                    'url'=> $cdn . $arrRes['uri']
                 );
             }
         }
