@@ -398,7 +398,7 @@ class FISPagelet {
             $html = str_replace(self::JS_SCRIPT_HOOK, $code . self::JS_SCRIPT_HOOK, $html);
             $code = '';
             if (!empty($arr['css'])) {
-                $code = '<link rel="stylesheet" type="text/css" href="'
+                $code = '<link rel="stylesheet" type="text/css" href="' . self::getCdn()
                     . implode('" /><link rel="stylesheet" type="text/css" href="' . self::getCdn(), $arr['css'])
                     . '" />';
             }
