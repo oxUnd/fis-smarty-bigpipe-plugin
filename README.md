@@ -152,14 +152,15 @@ BigPipe.register({});
 
 在smarty里面为了控制输出，使用插件代替几个html标签。
 
-|	标签			 |	插件 	   					|										   |
+|   标签         |  插件                        |                                          |
 |:--------------:|:-----------------------------|:-----------------------------------------|
-|	body 		 |		compiler.body.php 		| 确定JS的位置					   		   |
-|	html 		 |		compiler.html.php 		| 初始化数据								   |
-|	head 		 |		compiler.head.php 		| 确定css安放位置 						   |
-|	script 		 |		compiler.script.php 	| 收集内联脚本 							   |
-| 	style 		 |		compiler.style.php 		| 收集内联样式 							   |
-|   title 		 | 		compiler.title.php 		| 获取title，以便异步请求切换页面  		   |
+|   body         |      compiler.body.php       | 确定JS的位置                             |
+|   html         |      compiler.html.php       | 初始化数据                               |
+|   head         |      compiler.head.php       | 确定css安放位置                          |
+|   script       |      compiler.script.php     | 收集内联脚本                             |
+|   style        |      compiler.style.php      | 收集内联样式                             |
+|   title        |      compiler.title.php      | 获取title，以便异步请求切换页面          |
+|   cdn          |      compiler.cdn.php        | 动态cdn                                  |
 
 在`正常模式`渲染下，js和css加载的位置，css在head关闭标签前；js在body关闭标签前。
 
@@ -167,6 +168,13 @@ BigPipe.register({});
 
 + lib/FISResource.class.php  收集静态资源，<a href="http://pythontutor.com/visualize.html#code=collection+%3D+%5B%5D%0Adict+%3D+%7B%0A++++%22res%22%3A+%7B%0A++++++++%22a.js%22%3A+%7B%0A++++++++++++'uri'%3A+'/static/widget/a.js'%0A++++++++%7D,%0A++++++++%22c.js%22%3A+%7B%0A++++++++++++'uri'%3A+'/static/widget/b.js'%0A++++++++%7D%0A++++%7D%0A%7D%0A%0Adef+load(id)%3A%0A++++res+%3D+dict%5B'res'%5D%0A++++if+res.has_key(id)%3A%0A++++++++info+%3D+res%5Bid%5D%0A++++++++collection.append(info%5B'uri'%5D)%0A++++++++return+info%5B'uri'%5D%0A++++return+False%0A%0Aload('a.js')%0Aload('b.js')%0Aload('c.js')&mode=display&cumulative=false&heapPrimitives=false&drawParentPointers=false&textReferences=false&showOnlyOutputs=false&py=2&curInstr=0">算法演示</a>
 + lib/FISPagelet.class.php   初始化系统，输出模式控制
+
+##### 动态cdn使用原则
+
++ 动态cdn只对js，css资源起效，静态cdn和动态cdn不能同时在同一个资源引用上使用
++ 异步组件是否添加cdn，取决于是否使用`mod-store.js`，如果使用了则不加，如果没有使用则加。@TODO
++ 图片的cdn可以使用静态cdn [domain.image](https://github.com/fis-dev/fis/wiki/%E9%85%8D%E7%BD%AEAPI#roadmapdomainimage)
++ 其他一些静态资源也使用静态cdn [domain](https://github.com/fis-dev/fis/wiki/%E9%85%8D%E7%BD%AEAPI#roadmapdomain)
 
 
 #### 关于部署迁移

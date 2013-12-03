@@ -186,6 +186,7 @@ class FISResource {
                     $arrResourceMap['res'][$id]['pkg'] = $arrRes['pkg'];
                     //如果包含到了某一个包，则模块的url是多余的
                     if (!isset($_GET['fis_debug'])) {
+                        //@TODO
                         unset($arrResourceMap['res'][$id]['url']);
                     }
                 }
@@ -198,7 +199,8 @@ class FISResource {
         if (isset($arr['pkg'])) {
             foreach ($arr['pkg'] as $id => $arrRes) {
                 $arrResourceMap['pkg'][$id] = array(
-                    'url'=> $cdn . $arrRes['uri']
+                    'url' => $cdn . $arrRes['uri'],
+                    'has' => $arrRes['has']
                 );
             }
         }
