@@ -169,6 +169,18 @@ BigPipe.register({});
 + lib/FISResource.class.php  收集静态资源，<a href="http://pythontutor.com/visualize.html#code=collection+%3D+%5B%5D%0Adict+%3D+%7B%0A++++%22res%22%3A+%7B%0A++++++++%22a.js%22%3A+%7B%0A++++++++++++'uri'%3A+'/static/widget/a.js'%0A++++++++%7D,%0A++++++++%22c.js%22%3A+%7B%0A++++++++++++'uri'%3A+'/static/widget/b.js'%0A++++++++%7D%0A++++%7D%0A%7D%0A%0Adef+load(id)%3A%0A++++res+%3D+dict%5B'res'%5D%0A++++if+res.has_key(id)%3A%0A++++++++info+%3D+res%5Bid%5D%0A++++++++collection.append(info%5B'uri'%5D)%0A++++++++return+info%5B'uri'%5D%0A++++return+False%0A%0Aload('a.js')%0Aload('b.js')%0Aload('c.js')&mode=display&cumulative=false&heapPrimitives=false&drawParentPointers=false&textReferences=false&showOnlyOutputs=false&py=2&curInstr=0">算法演示</a>
 + lib/FISPagelet.class.php   初始化系统，输出模式控制
 
+##### compiler.widget.php
+
+``` smarty
+{%widget name="/widget/a.tpl"%}
+
+{%widget name="/widget/a.tpl" pagelet_id="test_id" mode="bigrender"%}  //支持bigrender
+
+{%widget name="/widget/a.tpl" pagelet_id="test_id" mode="quickling"%}  //支持wdiget异步化
+
+{%widget name="/widget/a.tpl" pagelet_id="test_id" mode="quickling" group="test_group"%} // quickling + group
+```
+
 ##### 动态cdn使用原则
 
 + 动态cdn只对js，css资源起效，静态cdn和动态cdn不能同时在同一个资源引用上使用
