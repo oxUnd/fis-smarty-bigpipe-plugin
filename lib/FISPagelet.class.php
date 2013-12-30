@@ -233,18 +233,14 @@ class FISPagelet {
     static public function start($id, $mode = null, $group = null) {
         $has_parent = !empty(self::$_context);
 
-        //这个是用来判断是否widget是async加载的。
-        $special_flag = false;
-        if ($mode !== null) {
-            $special_flag = true;
-        }
-
         if ($mode) {
             $widget_mode = self::_parseMode($mode);
         } else {
             $widget_mode = self::$mode;
         }
+
         self::$_pagelet_id = $id;
+
         $parent_id = $has_parent ? self::$_context['id'] : '';
         $qk_flag = self::$mode == self::MODE_QUICKLING ? '_qk_' : '';
         $id = empty($id) ? '__elm_' . $parent_id . '_' . $qk_flag . self::$_session_id ++ : $id;
@@ -343,7 +339,9 @@ class FISPagelet {
         
 
         if ($widget_mode == self::MODE_NOSCRIPT) {
-            echo '</div>';
+            if (self::$_pagelet_id) {
+                echo '</div>';
+            }
         } else {
 
             if ($context['hit']) {
@@ -374,9 +372,8 @@ class FISPagelet {
 
                         $html = '';
 
-                        if (!$has_parent) {
-                            echo '--></code>';
-                        }
+                        echo '--></code></div>';
+
                         self::$inner_widget[self::$mode][] = $widget; 
                     } else {
                         $context['html'] = $html;
