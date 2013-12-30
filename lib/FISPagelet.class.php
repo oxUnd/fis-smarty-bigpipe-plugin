@@ -536,13 +536,6 @@ class FISPagelet {
                 $merged = array_merge($array1[$key], $array2[$key]);
                 $merged = array_merge(array_unique($merged));
             } else {
-                if (!is_array($array1[$key]['res'])) {
-                    $array1[$key]['res'] = array();
-                }
-                if (!is_array($array2[$key]['res'])) {
-                    $array2[$key]['res'] = array();
-                }
-
                 $merged = array(
                     'res' => array_merge($array1['async']['res'], (array)$array2['async']['res']),
                     'pkg' => array_merge($array1['async']['pkg'], (array)$array2['async']['pkg'])
@@ -559,9 +552,9 @@ class FISPagelet {
         $pagelets = self::$_pagelets;
         $mode = self::$mode;
 
-        
         $res = array();
-        //{{{
+
+        //合并资源
         foreach (self::$inner_widget[$mode] as $item) {
             $res = self::merge_resource($res, $item);
         }
