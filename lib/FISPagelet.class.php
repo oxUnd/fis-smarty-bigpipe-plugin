@@ -316,6 +316,7 @@ class FISPagelet {
                     //获取widget内部的静态资源
                     FISResource::widgetStart();
                 }
+                //start a buffer
                 ob_start();
             }
         }
@@ -343,7 +344,6 @@ class FISPagelet {
                 echo '</div>';
             }
         } else {
-
             if ($context['hit']) {
                 //close buffer
                 $html = ob_get_clean();
@@ -353,6 +353,7 @@ class FISPagelet {
                     if ($widget_mode == self::MODE_BIGRENDER) {
                         $widget_style = $widget['style'];
                         $widget_script = $widget['script'];
+                        //内联css和script放到注释里面, 不需要收集
                         unset($widget['style']);
                         unset($widget['script']);
 
@@ -360,6 +361,7 @@ class FISPagelet {
                         if ($widget_style) {
                             $out .= '<style type="text/css">'. implode('', $widget_style) . '</style>';
                         };
+
                         $out .= $html;
                         if ($widget_script) {
                             $out .= '<script type="text/javascript">' . implode('', $widget_script) . '</script>';
@@ -374,7 +376,9 @@ class FISPagelet {
 
                         echo '--></code></div>';
 
+                        //收集外链的js和css
                         self::$inner_widget[self::$mode][] = $widget; 
+
                     } else {
                         $context['html'] = $html;
                         //删除不需要的信息
