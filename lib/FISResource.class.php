@@ -45,7 +45,7 @@ class FISResource {
 
         self::$arrWidgetStatic = array();
         self::$arrWidgetRequireAsync = array();
-        self::$arrWidgetStatic = array();
+        self::$arrWidgetScript = array();
         self::$arrWidgetStyle = array();
     }
 
@@ -279,6 +279,15 @@ class FISResource {
         } else {
             self::$arrAsyncDeleted[$strName] = true;
             $arrRes = self::getAsync($strName, 'res');
+
+            if ($arrRes['deps']) {
+                foreach ($arrRes['deps'] as $strDep) {
+                    if (self::getAsync($strDep, 'res')) {
+                        self::delAsyncDeps($strDep);
+                    }
+                }
+            }
+
             if ($arrRes['pkg']) {
                 $arrPkg = self::getAsync($arrRes['pkg'], 'pkg');
                 if ($arrPkg) {
@@ -299,14 +308,6 @@ class FISResource {
                 self::addStatic($res['uri'], 'js');
                 self::$arrLoaded[$strName] = $res['uri'];
                 self::delAsync($strName, 'res');
-            }
-            if ($arrRes['deps']) {
-                foreach ($arrRes['deps'] as $strDep) {
-                    //if (isset(self::$arrRequireAsyncCollection['res'][$strDep])) {
-                    if (self::getAsync($strDep, 'res')) {
-                        self::delAsyncDeps($strDep);
-                    }
-                }
             }
         }
     }

@@ -240,52 +240,62 @@ class FISPagelet {
         }
 
         if ($mode) {
-            self::$widget_mode = self::_parseMode($mode);
+            $widget_mode = self::_parseMode($mode);
         } else {
-            self::$widget_mode = self::$mode;
+            $widget_mode = self::$mode;
         }
         self::$_pagelet_id = $id;
         $parent_id = $has_parent ? self::$_context['id'] : '';
         $qk_flag = self::$mode == self::MODE_QUICKLING ? '_qk_' : '';
         $id = empty($id) ? '__elm_' . $parent_id . '_' . $qk_flag . self::$_session_id ++ : $id;
+            
 
-        //widget是否命中，默认命中
+        $parent = self::$_context;
+
+        $has_parent = !empty($parent);
+
+        //$hit
         $hit = true;
-        switch(self::$widget_mode) {
-            case self::MODE_NOSCRIPT:
-                if (self::$_pagelet_id) {
-                    echo '<div id="' . $id . '">';
-                }
-                break;
-            case self::MODE_BIGRENDER:
 
+        $context = array(
+            'id' => $id,            //widget id 
+            'mode' => $widget_mode, //当前widget的mode
+            'hit' => $hit          // 是否命中 
+        );
+
+        if ($has_parent) {
+            $context['parent_id'] = $parent['id'];
+            self::$_contextMap[$parent['id']] = $parent; 
+        }
+
+        if ($widget_mode == self::MODE_NOSCRIPT) {
+            //只有指定paglet_id的widget才嵌套一层div
+            if (self::$_pagelet_id) {
+                echo '<div id="' . $id . '">';
+            }
+        } else {
+            
+            if ($widget_mode == self::MODE_BIGRENDER) {
+                //widget 为bigrender时，将内容渲染到html注释里面
                 if (!$has_parent) {
                     echo '<div id="' . $id . '">';
                     echo '<code class="g_bigrender"><!--';
                 }
+            } else {
+                echo '<div id="' . $id . '">';
+            }
 
-                $parent = self::$_context;
-
-                $context = array('id' => $id, 'mode' => self::$widget_mode);
-
-                if(!empty($parent)) {
-                    $parent_id = $parent['id'];
-                    self::$_contextMap[$parent_id] = $parent;
-                    $context['parent_id'] = $parent_id;
-                }
-
-                $context['hit'] = $hit;
-                self::$_context = $context;
-                self::$bigrender = true;
-                FISResource::widgetStart();
-                ob_start();
-                break;
-            case self::MODE_QUICKLING:
+            if (self::$mode == self::MODE_QUICKLING) {
                 $hit = self::$filter[$id];
-            case self::MODE_BIGPIPE:
-                $context = array( 'id' => $id, 'async' => false);
-                //widget调用时mode='quickling'，so，打出异步加载代码
-                if ($special_flag && !$hit) {
+                //如果父widget被命中，则子widget设置为命中
+                if ($has_parent && $parent['hit']) {
+                    $hit = true;
+                } else if ($hit) {
+                    $context['parent_id'] = null;
+                }
+            } else if ($widget_mode == self::MODE_QUICKLING) {
+                //渲染模式不是quickling时，可以认为是首次渲染
+                if (self::$_pagelet_id && self::$mode != self::MODE_QUICKLING) {
                     if (!$group) {
                         echo '<textarea class="g_fis_bigrender" style="display:none;">'
                             .'BigPipe.asyncLoad({id: "'.$id.'"});'
@@ -298,33 +308,25 @@ class FISPagelet {
                             echo "<!--" . $group . "-->";
                         }
                     }
-                    $context['async'] = true;
                 }
+                // 不需要渲染这个widget
+                $hit = false;
+            }
 
-                $parent = self::$_context;
-                if(!empty($parent)) {
-                    $parent_id = $parent['id'];
-                    self::$_contextMap[$parent_id] = $parent;
-                    $context['parent_id'] = $parent_id;
-                    if($parent['hit'] && !$special_flag) {
-                        $hit = true;
-                    } else if($hit && self::$mode === self::MODE_QUICKLING){
-                        unset($context['parent_id']);
-                    }
-                }
-                $context['hit'] = $hit;
+            $context['hit'] = $hit;
 
-                self::$_context = $context;
-
-                if (empty($parent) && $hit) {
-                    FISResource::widgetStart();
-                } else if (!empty($parent) && !$parent['hit'] && $hit) {
+            if ($hit) { 
+                if (!$has_parent) {
+                    //获取widget内部的静态资源
                     FISResource::widgetStart();
                 }
-                echo '<div id="' . $id . '">';
                 ob_start();
-                break;
+            }
         }
+
+        //设置当前处理context
+        self::$_context = $context;
+
         return $hit;
     }
 
@@ -334,76 +336,85 @@ class FISPagelet {
      */
     static public function end() {
         $ret = true;
-        if (!self::$bigrender
-            && (self::$widget_mode == self::MODE_BIGPIPE
-                || self::$widget_mode == self::MODE_QUICKLING)) {
-            $html = ob_get_clean();
-            $pagelet = self::$_context;
-            //end
-            if (isset($pagelet['parent_id'])) {
-                $parent = self::$_contextMap[$pagelet['parent_id']];
-                if (!$parent['hit'] && $pagelet['hit']) {
-                    self::$inner_widget[self::$widget_mode][] = FISResource::widgetEnd();
 
-                }
-            } else {
-                if ($pagelet['hit']) {
-                    self::$inner_widget[self::$widget_mode][] = FISResource::widgetEnd();
-                }
-            }
+        $context = self::$_context;
+        $widget_mode = $context['mode']; 
+        $has_parent = $context['parent_id'];
+        
 
-            if($pagelet['hit'] && !$pagelet['async']){
-                unset($pagelet['hit']);
-                unset($pagelet['async']);
-                $pagelet['html'] = $html;
-                self::$_pagelets[] = &$pagelet;
-                unset($pagelet);
-            } else {
-                $ret = false;
-            }
-            $parent_id = self::$_context['parent_id'];
-            if(isset($parent_id)){
-                self::$_context = self::$_contextMap[$parent_id];
-                unset(self::$_contextMap[$parent_id]);
-            } else {
-                self::$_context = null;
-            }
-            self::$widget_mode = self::$mode;
+        if ($widget_mode == self::MODE_NOSCRIPT) {
             echo '</div>';
-        } else if (self::$bigrender) {
-            $html = ob_get_clean();
-            $widget = FISResource::widgetEnd();
-            $widget_style = $widget['style'];
-            $widget_script = $widget['script'];
-            unset($widget['style']);
-            unset($widget['script']);
-
-            $out = '';
-            if ($widget_style) {
-                $out .= '<style type="text/css">'. implode('', $widget_style) . '</style>';
-            };
-            $out .= $html;
-            if ($widget_script) {
-                $out .= '<script type="text/javascript">' . implode('', $widget_script) . '</script>';
-            }
-            echo str_replace (
-                array('\\', '-->'),
-                array('\\\\', '--\\>'),
-                $out
-            );
-            self::$inner_widget[self::$mode][] = $widget;
-
-            if(isset($parent_id)){
-                self::$_context = self::$_contextMap[$parent_id];
-                unset(self::$_contextMap[$parent_id]);
-            } else {
-                self::$bigrender = false;
-                self::$_context = null;
-                echo '--></code>';
-            }
-            self::$widget_mode = self::$mode;
         } else {
-            echo '</div>';
+
+            if ($context['hit']) {
+                //close buffer
+                $html = ob_get_clean();
+                if (!$has_parent) {
+                    $widget = FISResource::widgetEnd();
+                    // end
+                    if ($widget_mode == self::MODE_BIGRENDER) {
+                        $widget_style = $widget['style'];
+                        $widget_script = $widget['script'];
+                        unset($widget['style']);
+                        unset($widget['script']);
+
+                        $out = '';
+                        if ($widget_style) {
+                            $out .= '<style type="text/css">'. implode('', $widget_style) . '</style>';
+                        };
+                        $out .= $html;
+                        if ($widget_script) {
+                            $out .= '<script type="text/javascript">' . implode('', $widget_script) . '</script>';
+                        }
+                        echo str_replace (
+                            array('\\', '-->'),
+                            array('\\\\', '--\\>'),
+                            $out
+                        );
+
+                        $html = '';
+
+                        if (!$has_parent) {
+                            echo '--></code>';
+                        }
+
+                        self::$inner_widget[self::$mode][] = $widget; 
+                    } else {
+                        $context['html'] = $html;
+                        //删除不需要的信息
+                        unset($context['mode']);
+                        unset($context['hit']);
+                        //not parent
+                        unset($context['parent_id']);
+                        self::$_pagelets[] = $context; 
+
+                        echo '</div>';
+
+                        self::$inner_widget[$widget_mode][] = $widget; 
+                    }
+                } else {
+                    // end
+                    if ($widget_mode == self::MODE_BIGRENDER) {
+                        echo $html; 
+                    } else {
+                        $context['html'] = $html;
+                        //删除不需要的信息
+                        unset($context['mode']);
+                        unset($context['hit']);
+                        self::$_pagelets[] = $context; 
+
+                        echo '</div>';
+
+                    }
+                }
+            }
+        }
+
+        //切换context
+        self::$_context = self::$_contextMap[$context['parent_id']];
+        unset(self::$_contextMap[$context['parent_id']]);
+        if (!$has_parent) {
+            self::$_context = null;
         }
 
         return $ret;
