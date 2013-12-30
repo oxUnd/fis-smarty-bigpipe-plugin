@@ -222,6 +222,8 @@ class FISPagelet {
         }
         return $mode;
     }
+
+
     /**
      * WIDGET START
      * 解析参数，收集widget所用到的静态资源
@@ -387,9 +389,6 @@ class FISPagelet {
                         //not parent
                         unset($context['parent_id']);
                         self::$_pagelets[] = $context; 
-
-                        echo '</div>';
-
                         self::$inner_widget[$widget_mode][] = $widget; 
                     }
                 } else {
@@ -402,12 +401,14 @@ class FISPagelet {
                         unset($context['mode']);
                         unset($context['hit']);
                         self::$_pagelets[] = $context; 
-
-                        echo '</div>';
-
                     }
                 }
             }
+
+            if ($widget_mode != self::MODE_BIGRENDER) {
+                echo '</div>';
+            }
+
         }
 
         //切换context
@@ -508,10 +509,7 @@ class FISPagelet {
         return str_replace($search, $replace, $html);
     }
 
-    static public function display($html) {
-        $html = self::insertPageletGroup($html);
-        $pagelets = self::$_pagelets;
-        $mode = self::$mode;
+    static function merge_resource(array $array1, array $array2) {
         $res = array(
             'js' => array(),
             'css' => array(),
@@ -523,39 +521,60 @@ class FISPagelet {
             )
         );
 
+        $merged = array();
+
+        foreach ($res as $key => $val) {
+            if (!is_array($array1[$key])) {
+                $array1[$key] = $val;
+            }
+
+            if (!is_array($array2[$key])) {
+                $array2[$key] = $val;
+            }
+
+            if ($key != 'async') {
+                $merged = array_merge($array1[$key], $array2[$key]);
+                $merged = array_merge(array_unique($merged));
+            } else {
+                if (!is_array($array1[$key]['res'])) {
+                    $array1[$key]['res'] = array();
+                }
+                if (!is_array($array2[$key]['res'])) {
+                    $array2[$key]['res'] = array();
+                }
+
+                $merged = array(
+                    'res' => array_merge($array1['async']['res'], (array)$array2['async']['res']),
+                    'pkg' => array_merge($array1['async']['pkg'], (array)$array2['async']['pkg'])
+                );
+            }
+            //合并收集
+            $array1[$key] = $merged;
+        }
+        return $array1;
+    }
+
+    static public function display($html) {
+        $html = self::insertPageletGroup($html);
+        $pagelets = self::$_pagelets;
+        $mode = self::$mode;
+
+        
+        $res = array();
         //{{{
         foreach (self::$inner_widget[$mode] as $item) {
-            foreach ($res as $key => $val) {
-                if (isset($item[$key]) && is_array($item[$key])) {
-                    if ($key != 'async') {
-                        $arr = array_merge($res[$key], $item[$key]);
-                        $arr = array_merge(array_unique($arr));
-                    } else {
-                        $arr = array(
-                            'res' => array_merge($res['async']['res'], (array)$item['async']['res']),
-                            'pkg' => array_merge($res['async']['pkg'], (array)$item['async']['pkg'])
-                        );
-                    }
-                    //合并收集
-                    $res[$key] = $arr;
-                }
-            }
-        }
-        //if empty, unset it!
-        foreach ($res as $key => $val) {
-            if (empty($val)) {
-                unset($res[$key]);
-            }
-        }
-        //}}}
-
-        //add cdn
-        foreach ((array)$res['js'] as $key => $js) {
-            $res['js'][$key] = self::getCdn() . $js;
+            $res = self::merge_resource($res, $item);
         }
 
-        foreach ((array)$res['css'] as $key => $css) {
-            $res['css'][$key] = self::getCdn() . $css;
+        if ($mode != self::MODE_NOSCRIPT) {
+            //add cdn
+            foreach ((array)$res['js'] as $key => $js) {
+                $res['js'][$key] = self::getCdn() . $js;
+            }
+
+            foreach ((array)$res['css'] as $key => $css) {
+                $res['css'][$key] = self::getCdn() . $css;
+            }
         }
 
         //tpl信息没有必要打到页面
@@ -563,17 +582,14 @@ class FISPagelet {
             case self::MODE_NOSCRIPT:
                 //渲染widget以外静态文件
                 $all_static = FISResource::getArrStaticCollection();
+                $all_static = self::merge_resource($all_static, $res); 
+
                 $html = self::renderStatic(
                     $html,
-                    $all_static
-                );
-                //bigrender 的静态资源
-                $html = self::renderStatic(
-                    $html,
-                    $res,
+                    $all_static,
                     true
                 );
-
+              
                 break;
             case self::MODE_QUICKLING:
                 header('Content-Type: text/json;charset: utf-8');
