@@ -377,7 +377,6 @@ class FISPagelet {
                         if (!$has_parent) {
                             echo '--></code>';
                         }
-
                         self::$inner_widget[self::$mode][] = $widget; 
                     } else {
                         $context['html'] = $html;
@@ -565,9 +564,15 @@ class FISPagelet {
                 $all_static = FISResource::getArrStaticCollection();
                 $html = self::renderStatic(
                     $html,
-                    $all_static,
+                    $all_static
+                );
+                //bigrender 的静态资源
+                $html = self::renderStatic(
+                    $html,
+                    $res,
                     true
                 );
+
                 break;
             case self::MODE_QUICKLING:
                 header('Content-Type: text/json;charset: utf-8');
