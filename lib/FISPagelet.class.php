@@ -289,7 +289,9 @@ class FISPagelet {
                 if ($has_parent && $parent['hit']) {
                     $hit = true;
                 } else if ($hit) {
+                    //指定获取一个子widget时，需要单独处理这个widget
                     $context['parent_id'] = null;
+                    $has_parent = false;
                 }
             } else if ($widget_mode == self::MODE_QUICKLING) {
                 //渲染模式不是quickling时，可以认为是首次渲染
