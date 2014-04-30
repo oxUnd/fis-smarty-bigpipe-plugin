@@ -1,7 +1,5 @@
 <?php
-if (!class_exists('FISResource')) require_once(dirname(__FILE__) . '/FISResource.class.php');
-
-
+if (!class_exists('FISResource', false)) require_once(dirname(__FILE__) . '/FISResource.class.php');
 
 /**
  * Checks a string for UTF-8 encoding.
