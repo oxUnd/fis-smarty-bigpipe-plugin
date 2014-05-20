@@ -585,7 +585,7 @@ class FISPagelet {
               
                 break;
             case self::MODE_QUICKLING:
-                header('Content-Type: text/json;charset: utf-8');
+                header('Content-Type: text/json; charset=utf-8');
                 if ($res['script']) {
                     $res['script'] = convertToUtf8(implode("\n", $res['script']));
                 }
