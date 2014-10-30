@@ -448,15 +448,17 @@ class FISPagelet {
             $resource_map = $arr['async'];
             $loadModJs = (FISResource::getFramework() && ($arr['js'] || $resource_map));
             if ($loadModJs) {
+                $code .= '<script type="text/javascript" src="'.self::getCdn() . FISResource::getFramework().'"></script>';
+                if ($resource_map) {
+                    $code .= '<script type="text/javascript">';
+                    $code .= 'require.resourceMap('.json_encode($resource_map).');';
+                    $code .= '</script>';
+                }
                 foreach ($arr['js'] as $js) {
-                    $code .= '<script type="text/javascript" src="' . self::getCdn() . $js . '"></script>';
                     if ($js == FISResource::getFramework()) {
-                        if ($resource_map) {
-                            $code .= '<script type="text/javascript">';
-                            $code .= 'require.resourceMap('.json_encode($resource_map).');';
-                            $code .= '</script>';
-                        }
+                        continue;
                     }
+                    $code .= '<script type="text/javascript" src="' . self::getCdn() . $js . '"></script>';
                 }
             }
 
