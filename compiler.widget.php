@@ -57,7 +57,7 @@ function smarty_compiler_widget($arrParams,  $smarty){
         $strCode .= '}';
         $strCode .= 'FISPagelet::load('.$strName.', $_smarty_tpl->smarty);';
         $strCode .= '}';
-        $strCode .= 'FISPagelet::end();';
+        $strCode .= 'FISPagelet::end('.$strPageletId.');';
     } else {
         trigger_error('undefined widget name in file "' . $smarty->_current_file . '"', E_USER_ERROR);
     }
