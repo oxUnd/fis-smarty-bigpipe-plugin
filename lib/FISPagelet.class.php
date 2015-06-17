@@ -588,10 +588,10 @@ class FISPagelet {
                 break;
             case self::MODE_QUICKLING:
                 header('Content-Type: text/json; charset=utf-8');
-                if ($res['script']) {
+                if (is_array($res['script'])) {
                     $res['script'] = convertToUtf8(implode("\n", $res['script']));
                 }
-                if ($res['style']) {
+                if (is_array($res['style'])) {
                     $res['style'] = convertToUtf8(implode("\n", $res['style']));
                 }
                 foreach ($pagelets as &$pagelet) {
