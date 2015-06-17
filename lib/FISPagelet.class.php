@@ -622,10 +622,10 @@ class FISPagelet {
                 $html .= '</script>';
                 $html .= "\n";
 
-                if ($res['script']) {
+                if (is_array($res['script'])) {
                     $res['script'] = convertToUtf8(implode("\n", $res['script']));
                 }
-                if ($res['style']) {
+                if (is_array($res['style'])) {
                     $res['style'] = convertToUtf8(implode("\n", $res['style']));
                 }
                 $html .= "\n";
