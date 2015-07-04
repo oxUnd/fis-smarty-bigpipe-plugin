@@ -244,7 +244,7 @@ class FISPagelet {
         $parent_id = $has_parent ? self::$_context['id'] : '';
         $qk_flag = self::$mode == self::MODE_QUICKLING ? '_qk_' : '';
         $id = empty($id) ? '__elm_' . $parent_id . '_' . $qk_flag . self::$_session_id ++ : $id;
-            
+
 
         $parent = self::$_context;
 
@@ -254,14 +254,14 @@ class FISPagelet {
         $hit = true;
 
         $context = array(
-            'id' => $id,            //widget id 
+            'id' => $id,            //widget id
             'mode' => $widget_mode, //当前widget的mode
-            'hit' => $hit          // 是否命中 
+            'hit' => $hit          // 是否命中
         );
 
         if ($has_parent) {
             $context['parent_id'] = $parent['id'];
-            self::$_contextMap[$parent['id']] = $parent; 
+            self::$_contextMap[$parent['id']] = $parent;
         }
 
         if ($widget_mode == self::MODE_NOSCRIPT) {
@@ -270,7 +270,7 @@ class FISPagelet {
                 echo '<div id="' . $id . '">';
             }
         } else {
-            
+
             if ($widget_mode == self::MODE_BIGRENDER) {
                 //widget 为bigrender时，将内容渲染到html注释里面
                 if (!$has_parent) {
@@ -313,7 +313,7 @@ class FISPagelet {
 
             $context['hit'] = $hit;
 
-            if ($hit) { 
+            if ($hit) {
                 if (!$has_parent) {
                     //获取widget内部的静态资源
                     FISResource::widgetStart();
@@ -337,9 +337,12 @@ class FISPagelet {
         $ret = true;
 
         $context = self::$_context;
-        $widget_mode = $context['mode']; 
+        $widget_mode = $context['mode'];
         $has_parent = $context['parent_id'];
-        
+
+        if ($id) {
+            self::$_pagelet_id = $id;
+        }
 
         if ($widget_mode == self::MODE_NOSCRIPT) {
             if (self::$_pagelet_id) {
@@ -379,7 +382,7 @@ class FISPagelet {
                         echo '--></code></div>';
 
                         //收集外链的js和css
-                        self::$inner_widget[self::$mode][] = $widget; 
+                        self::$inner_widget[self::$mode][] = $widget;
 
                     } else {
                         $context['html'] = $html;
@@ -388,19 +391,19 @@ class FISPagelet {
                         unset($context['hit']);
                         //not parent
                         unset($context['parent_id']);
-                        self::$_pagelets[] = $context; 
-                        self::$inner_widget[$widget_mode][] = $widget; 
+                        self::$_pagelets[] = $context;
+                        self::$inner_widget[$widget_mode][] = $widget;
                     }
                 } else {
                     // end
                     if ($widget_mode == self::MODE_BIGRENDER) {
-                        echo $html; 
+                        echo $html;
                     } else {
                         $context['html'] = $html;
                         //删除不需要的信息
                         unset($context['mode']);
                         unset($context['hit']);
-                        self::$_pagelets[] = $context; 
+                        self::$_pagelets[] = $context;
                     }
                 }
             }
@@ -577,14 +580,14 @@ class FISPagelet {
             case self::MODE_NOSCRIPT:
                 //渲染widget以外静态文件
                 $all_static = FISResource::getArrStaticCollection();
-                $all_static = self::merge_resource($all_static, $res); 
+                $all_static = self::merge_resource($all_static, $res);
 
                 $html = self::renderStatic(
                     $html,
                     $all_static,
                     true
                 );
-              
+
                 break;
             case self::MODE_QUICKLING:
                 header('Content-Type: text/json; charset=utf-8');

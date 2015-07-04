@@ -11,10 +11,11 @@ function smarty_compiler_widget_block($arrParams,  $smarty){
 }
 
 function smarty_compiler_widget_blockclose($arrParams,  $smarty){
+    $pageletId = $arrParams['pagelet_id'];
     $strCode = '';
     $strCode .= '<?php ';
     $strCode .= 'if(class_exists(\'FISPagelet\', false)){';
-    $strCode .= '   FISPagelet::end();';
+    $strCode .= '   FISPagelet::end('.$pageletId.');';
     $strCode .= '}';
     $strCode .= '?>';
     return $strCode;
